@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>গিটহাব অ্যাকাউন্ট চেকার</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#1b2030;--mut:#6b7385;--bd:#e3e7f0;--ac:#6d5efc;--ac2:#00b8d9;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--sh:0 4px 18px rgba(30,40,90,.07)}
+@media (prefers-color-scheme:dark){:root{--bg:#0e111a;--card:#171b27;--tx:#e8ebf5;--mut:#98a1b8;--bd:#262c3d;--ac:#8b7fff;--ac2:#22d3ee;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--sh:0 4px 18px rgba(0,0,0,.35)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Hind Siliguri",system-ui,"Noto Sans Bengali",sans-serif;line-height:1.65;padding:16px}
+main{max-width:800px;margin:0 auto}
+.hero{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-radius:18px;padding:26px 22px;margin-bottom:16px;box-shadow:var(--sh)}
+.hero h1{font-size:1.7rem;margin:0 0 4px;font-weight:700}
+.hero p{margin:0;opacity:.92}
+.hero .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.hero .pills span{background:rgba(255,255,255,.2);border-radius:99px;padding:2px 12px;font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh);animation:up .3s ease both}
+@keyframes up{from{opacity:0;transform:translateY(6px)}}
+textarea,input{width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);font-size:1rem;font-family:inherit;outline:none}
+textarea:focus,input:focus{border-color:var(--ac)}
+textarea{min-height:130px;resize:vertical}
+.row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}
+button{padding:11px 22px;border:0;border-radius:12px;background:var(--ac);color:#fff;font-size:1rem;cursor:pointer;font-family:inherit;font-weight:600}
+button:hover{filter:brightness(1.08)}button:disabled{opacity:.6}
+.sec{background:var(--bg)!important;color:var(--tx)!important;border:1.5px solid var(--bd)}
+#cnt{margin-left:auto;color:var(--mut);font-size:.9rem}
+details>summary{cursor:pointer;display:flex;gap:10px;align-items:center;flex-wrap:wrap;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+summary img{width:42px;height:42px;border-radius:50%;border:2px solid var(--bd)}
+.ring{margin-left:auto;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.95rem;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--bd) 0);position:relative;color:var(--tx)}
+.ring::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--card)}.ring{isolation:isolate}
+.ring{z-index:0}
+.badge{display:inline-block;padding:1px 10px;border-radius:99px;font-weight:600;font-size:.82rem;border:1px solid currentColor}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}.info{color:var(--mut)}
+.s-ok{border-left:5px solid var(--ok)}.s-warn{border-left:5px solid var(--warn)}.s-bad{border-left:5px solid var(--bad)}
+ul{list-style:none;padding:0;margin:8px 0 0}
+li{padding:6px 0;border-top:1px dashed var(--bd);font-size:.95rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:12px}
+.stats div{background:var(--bg);border-radius:10px;padding:7px;text-align:center;font-size:.85rem;color:var(--mut)}
+.stats b{display:block;font-size:1.1rem;color:var(--tx)}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin-bottom:12px}
+.tile{background:var(--card);color:var(--mut);border:1.5px solid var(--bd);padding:8px 6px;font-weight:500;font-size:.85rem;box-shadow:var(--sh)}
+.tile b{display:block;font-size:1.4rem;line-height:1.2}
+.tile.ok b{color:var(--ok)}.tile.warn b{color:var(--warn)}.tile.bad b{color:var(--bad)}.tile:not(.ok):not(.warn):not(.bad) b{color:var(--tx)}
+.tile.on{border-color:var(--ac);background:var(--bg)}
+small{color:var(--mut)}
+.bar{height:8px;background:var(--bd);border-radius:6px;margin:8px 0;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .3s}
+footer{text-align:center;margin:26px 0 10px;color:var(--mut)}footer a{color:var(--ac);font-weight:700;text-decoration:none}
+[hidden]{display:none!important}
+.hero{position:relative;overflow:hidden}.hero>*{position:relative;z-index:1}
+.hero::after{content:"";position:absolute;right:-40px;top:-50px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.14)}
+.hero::before{content:"";position:absolute;left:-30px;bottom:-60px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.1)}
+.drop{display:block;border:2px dashed var(--ac);border-radius:16px;padding:22px 12px;text-align:center;cursor:pointer;background:linear-gradient(135deg,rgba(109,94,252,.07),rgba(0,184,217,.07));transition:.2s}
+.drop:hover,.drop.on{transform:translateY(-2px);background:linear-gradient(135deg,rgba(109,94,252,.16),rgba(0,184,217,.16))}
+.drop .big{font-size:2.3rem;line-height:1.3}.drop b{display:block}
+.or{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:.85rem;margin:14px 0 10px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--bd)}
+#fmsg{margin-top:8px;font-size:.88rem;color:var(--mut)}#fmsg div{padding:1px 0}
+input[type=checkbox]{width:auto;margin-right:6px;accent-color:var(--ac);vertical-align:middle}
+.sortl{display:block;margin:0 0 10px;color:var(--mut);font-size:.9rem;cursor:pointer}
+.dl{margin:18px 0;text-align:center}.dl button{padding:14px 28px;font-size:1.05rem;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:var(--sh)}
+
+#pat select{width:100%;padding:11px 12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);font:inherit;margin-top:4px}
+#pat label.pf{display:block;margin-top:10px;font-size:.88rem;color:var(--mut)}
+#pat .pre{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+#pat .pre button{padding:7px 14px;font-size:.9rem;background:var(--bg);color:var(--tx);border:1.5px solid var(--bd);border-radius:99px;font-weight:500}
+#pat .pre button.on{border-color:var(--ac);background:var(--card);box-shadow:0 0 0 2px var(--ac) inset}
+#pat .ps{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px dashed var(--bd);cursor:pointer}
+#pat .ps input{margin-top:7px;flex:none}
+#pat .ps code{font-weight:700;font-size:.88rem}
+#pat .ps small{display:block;line-height:1.35}
+#pat .ps.risky code{color:var(--bad)}
+#pat .pw{display:none;margin-top:10px;padding:9px 12px;border-radius:10px;background:rgba(217,119,6,.14);color:var(--warn);font-size:.88rem}
+#pat .pw.show{display:block}
+#pat a.go{display:block;text-align:center;text-decoration:none;margin-top:12px;padding:12px;border-radius:12px;background:var(--ac);color:#fff;font-weight:600}
+#pat .pu{word-break:break-all;font-size:.76rem;color:var(--mut);margin-top:8px;font-family:ui-monospace,Menlo,monospace}
+</style>
+</head>
+<body>
+<main>
+<div class="hero"><h1>🔍 গিটহাব অ্যাকাউন্ট চেকার</h1><p>অ্যাকাউন্ট ভালো আছে কি না, ফলো বা স্টার পাওয়ার মতো অবস্থায় আছে কি না, এক ক্লিকে যাচাই করুন।</p>
+<div class="pills"><span>📎 PDF/Excel আপলোড</span><span>👥 একসাথে অনেকগুলো</span><span>🚫 ৪০৪/সাসপেন্ড শনাক্ত</span><span>✉️ ইউজারনেম, ইমেইল বা URL</span><span>🔑 টোকেন তৈরির সহায়ক</span></div></div>
+<div class="card">
+<label class="drop" id="drop" for="fi"><div class="big">📄 📊</div><b>PDF / Excel / CSV / TXT ফাইল এখানে ছেড়ে দিন</b><small>অথবা ক্লিক করে বাছাই করুন · একসাথে একাধিক ফাইল চলবে · ফাইল থেকে গিটহাব লিংক, ইমেইল ও ইউজারনেম নিজে খুঁজে নেবে</small></label>
+<input id="fi" type="file" multiple accept=".pdf,.xlsx,.xls,.csv,.txt" hidden><div id="fmsg"></div>
+<div class="or">অথবা নিচে নিজে লিখুন</div>
+<textarea id="q" placeholder="octocat&#10;https://github.com/torvalds&#10;someone@example.com&#10;..."></textarea>
+<details style="margin-top:8px"><summary><small>GitHub টোকেন (ঐচ্ছিক, রেট লিমিট বাড়াতে) ▾</small></summary>
+<input id="t" type="password" placeholder="ghp_... (খালি রাখলেও চলবে)" style="margin-top:8px">
+<small>টোকেন ছাড়া ঘণ্টায় ৬০টি রিকোয়েস্ট, আর প্রতিটি অ্যাকাউন্টে প্রায় ৩টি লাগে, অর্থাৎ ঘণ্টায় প্রায় ২০টি অ্যাকাউন্ট। টোকেন দিলে ঘণ্টায় ৫০০০টি রিকোয়েস্ট। টোকেন নেই? <a href="#pat">নিচে থেকে তৈরি করুন</a>।</small></details>
+<div class="row"><button id="b">🔎 চেক করুন</button><button id="d" type="button" class="sec" hidden>ডেমো দেখুন</button><span id="cnt"></span></div>
+</div>
+<details class="card" id="pat"><summary><b>🔑 GitHub টোকেন তৈরি করুন</b><small>scope বেছে এক ক্লিকে ফর্ম খুলুন</small></summary>
+<p style="margin:10px 0 0"><small>এই পেজ টোকেন বানায় না বা জমা রাখে না, শুধু GitHub-এর ফর্মের লিংক বানিয়ে দেয় যাতে note, মেয়াদ ও scope আগে থেকে পূরণ থাকে। এই চেকারের জন্য <b>কোনো scope লাগে না</b>, শুধু রেট লিমিট বাড়াতে টোকেন দরকার।</small></p>
+<div class="pre" id="pre"></div>
+<label class="pf" for="pnote">Note (টোকেনের নাম)</label>
+<input id="pnote" type="text" value="github-checker" autocomplete="off">
+<label class="pf" for="pexp">মেয়াদ</label>
+<select id="pexp"><option value="7">৭ দিন</option><option value="30" selected>৩০ দিন</option><option value="60">৬০ দিন</option><option value="90">৯০ দিন</option><option value="none">মেয়াদ নেই (ঝুঁকিপূর্ণ)</option></select>
+<div class="pw" id="pw-e">⚠️ মেয়াদহীন টোকেন চুরি হলে চিরকাল অ্যাক্সেস থাকে। ৩০ বা ৯০ দিন রাখা ভালো।</div>
+<label class="pf">Scope</label>
+<div id="psc"></div>
+<div class="pw" id="pw-s">⚠️ ঝুঁকিপূর্ণ বা অনেকগুলো scope বেছেছেন। শুধু যা দরকার তাই রাখুন।</div>
+<a class="go" id="pgo" href="#" target="_blank" rel="noopener noreferrer">GitHub-এ টোকেন ফর্ম খুলুন</a>
+<div class="row"><button id="pcp" type="button" class="sec">লিংক কপি</button><button id="pja" type="button" class="sec">টিক-অল কোড কপি</button></div>
+<div class="pu" id="pu"></div>
+<p style="margin:10px 0 0"><small>ধাপ: লগইন করুন → নিচে <b>Generate token</b> চাপুন → টোকেন (<code>ghp_…</code>) একবারই দেখাবে, কপি করে উপরের "GitHub টোকেন" ঘরে বসান। সব scope টিক না হলে "টিক-অল কোড" ফর্ম পেজের অ্যাড্রেস বারে বসিয়ে Enter দিন (শুরুতে <code>javascript:</code> মুছে গেলে নিজে লিখুন)।</small></p>
+</details>
+<div id="prog"></div><div id="sum" class="sum"></div><label class="sortl" id="srtw" hidden><input type="checkbox" id="srt" checked>ভালো অ্যাকাউন্ট উপরে, খারাপ নিচে সাজান</label><div id="out"></div><div id="dl" class="dl"></div>
+<p><small>দ্রষ্টব্য: এটি পাবলিক তথ্যের ভিত্তিতে অনুমানভিত্তিক বিশ্লেষণ। ইমেইল দিয়ে খুঁজলে কেবল সেই অ্যাকাউন্টই পাওয়া যাবে যার ইমেইল পাবলিক বা পাবলিক কমিটে ব্যবহৃত। শ্যাডো-ব্যান বা ব্যক্তিগত রেস্ট্রিকশন এখান থেকে জানা সম্ভব নয়।</small></p>
+<footer>Created with ❤️ by <a href="https://www.facebook.com/" target="_blank" rel="noopener" >মামুন</a></footer>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let token='';
+async function gh(p){
+  const h={Accept:'application/vnd.github+json'};
+  if(token)h.Authorization='Bearer '+token;
+  const r=await fetch('https://api.github.com'+p,{headers:h});
+  if((r.status===403||r.status===429)&&r.headers.get('x-ratelimit-remaining')==='0')throw new Error('RATE');
+  return r;
+}
+async function resolve(q){
+  q=q.trim().replace(/^https?:\/\/(www\.)?github\.com\//i,'').replace(/^@/,'').replace(/[\/?#].*$/,'');
+  if(!q.includes('@'))return q;
+  let r=await gh('/search/users?q='+encodeURIComponent(q+' in:email'));
+  if(r.ok){const d=await r.json();if(d.items?.length)return d.items[0].login}
+  r=await gh('/search/commits?q='+encodeURIComponent('author-email:'+q)+'&per_page=1');
+  if(r.ok){const d=await r.json();const l=d.items?.[0]?.author?.login;if(l)return l}
+  return null;
+}
+const days=d=>Math.floor((Date.now()-new Date(d))/864e5);
+function analyze(u,repos,ev,rok=true){
+  const own=repos.filter(r=>!r.fork),stars=own.reduce((a,r)=>a+r.stargazers_count,0);
+  const age=days(u.created_at),lastEv=ev[0]?days(ev[0].created_at):null,lastPush=repos[0]?days(repos[0].pushed_at):null;
+  let score=100;const L=[];const add=(lv,t,pen=0)=>{L.push([lv,t]);score-=pen};
+  add('ok','প্রোফাইল পাবলিক ও সবার কাছে দেখা যাচ্ছে, ফলো/স্টার দেওয়া যাবে');
+  if(age<30)add('info','নতুন অ্যাকাউন্ট ('+age+' দিন), এটি স্বাভাবিক, কোনো সমস্যা নয়');
+  else add('ok','অ্যাকাউন্টের বয়স '+Math.floor(age/36.5)/10+' বছর');
+  if(!rok)add('warn','রিপোজিটরির তালিকা লোড হয়নি',20);
+  if(u.following>=100&&u.followers<u.following/10)add('bad','ফলোয়ারের তুলনায় ফলোইং অস্বাভাবিক বেশি (স্প্যামের লক্ষণ হতে পারে)',40);
+  if(age<7&&u.following>50)add('warn','নতুন অ্যাকাউন্টে অল্প সময়েই অনেক ফলো করা হয়েছে (স্প্যাম ফ্ল্যাগের ঝুঁকি)',20);
+  if(u.public_repos>=5&&own.length===0)add('warn','সব রিপোজিটরিই ফর্ক করা, নিজের তৈরি কিছু নেই',10);
+  if(lastEv!==null&&lastEv<=90)add('ok','সাম্প্রতিক অ্যাক্টিভিটি আছে ('+lastEv+' দিন আগে)');
+  if(stars>0)add('ok','রিপোজিটরিতে মোট '+stars+'টি স্টার');
+  if(u.type&&u.type!=='User')add('info','এটি '+u.type+' অ্যাকাউন্ট');
+  const miss=[['নাম',u.name],['বায়ো',u.bio],['রিপোজিটরি',u.public_repos>0],['অবস্থান',u.location]].filter(x=>!x[1]).map(x=>x[0]);
+  return {st:'ok',u,L,miss,lastPush,score:Math.max(0,Math.min(100,score))};
+}
+async function check(inp){
+  try{
+    const login=await resolve(inp);
+    if(!login)return {inp,st:'nf',k:'email',msg:'এই ইমেইলের সাথে মিলে যায় এমন পাবলিক অ্যাকাউন্ট পাওয়া যায়নি (ইমেইল প্রাইভেট থাকলে ইউজারনেম দিন)'};
+    const ur=await gh('/users/'+encodeURIComponent(login));
+    if(ur.status===404)return {inp,st:'nf',k:'404',msg:'"'+login+'" প্রোফাইল খুললে ৪০৪ আসছে।'};
+    if(!ur.ok)return {inp,st:'err',msg:'GitHub ত্রুটি '+ur.status};
+    const u=await ur.json();
+    const [rr,er]=await Promise.all([gh('/users/'+u.login+'/repos?per_page=100&sort=pushed'),gh('/users/'+u.login+'/events/public?per_page=100')]);
+    return {inp,...analyze(u,rr.ok?await rr.json():[],er.ok?await er.json():[],rr.ok)};
+  }catch(e){return e.message==='RATE'?{inp,st:'rate',msg:'রেট লিমিট শেষ, পরে চেষ্টা করুন বা টোকেন দিন'}:{inp,st:'err',msg:'নেটওয়ার্ক সমস্যা'}}
+}
+const lab=s=>s>=75?['ok','ভালো ✅']:s>=50?['warn','সতর্কতা ⚠️']:['bad','ঝুঁকিপূর্ণ ❌'];
+const ic={ok:'✅',warn:'⚠️',bad:'❌',info:'ℹ️'};
+function row(r){
+  if(r.st==='nf'&&r.k==='404')return `<div class="card s-bad"><b>${esc(r.inp)}</b> <span class="badge bad">৪০৪ ❌ অন্যদের কাছে দেখা যায় না</span><br><small>${esc(r.msg)} অ্যাকাউন্টটি সাসপেন্ড, ফ্ল্যাগড/শ্যাডো-ব্যান, মুছে ফেলা বা নাম বদল হয়েছে। এতে কেউ ফলো বা স্টার দিতে পারবে না। নিজের অ্যাকাউন্ট হলে লগআউট অবস্থায় প্রোফাইল লিংক খুলে নিশ্চিত হয়ে GitHub Support-এ আপিল করুন।</small></div>`;
+  if(r.st!=='ok')return `<div class="card s-warn"><b>${esc(r.inp)}</b> <span class="badge warn">${r.st==='nf'?'পাওয়া যায়নি':r.st==='rate'?'রেট লিমিট':'ত্রুটি'}</span><br><small>${esc(r.msg)}</small></div>`;
+  const u=r.u,[c,l]=lab(r.score),n=r.L.filter(x=>x[0]==='bad'||x[0]==='warn').length;
+  return `<details class="card s-${c}"><summary><img src="${esc(u.avatar_url)}" alt=""><b>@${esc(u.login)}</b><span class="badge ${c}">${l}</span><small>${n?n+'টি সমস্যা':'কোনো সমস্যা নেই'}</small><span class="ring" style="--p:${r.score};--c:var(--${c})">${r.score}</span></summary>
+<div class="stats"><div><b>${u.public_repos}</b>রিপো</div><div><b>${u.followers}</b>ফলোয়ার</div><div><b>${u.following}</b>ফলোইং</div><div><b>${u.public_gists}</b>গিস্ট</div></div>
+<ul>${r.L.map(x=>`<li class="${x[0]}">${ic[x[0]]} ${esc(x[1])}</li>`).join('')}</ul>
+<small>প্রোফাইল সম্পূর্ণতা: ${4-r.miss.length}/4${r.miss.length?' (বাকি: '+r.miss.join(', ')+')':''}। এটি ঐচ্ছিক, স্কোরে প্রভাব ফেলে না।<br>যোগদান: ${new Date(u.created_at).toLocaleDateString('bn-BD')} · সর্বশেষ পুশ: ${r.lastPush===null?'—':r.lastPush+' দিন আগে'} · <a href="${esc(u.html_url)}" target="_blank" rel="noopener">প্রোফাইল দেখুন</a></small></details>`;
+}
+let F='all',LR=[],LT=0;
+const rank=r=>({ok:0,warn:1,bad:2,nf:3,oth:4})[cat(r)];
+const srt=a=>[...a].sort((x,y)=>rank(x)-rank(y)||((y.score||0)-(x.score||0)));
+const ordered=()=>LR.every(Boolean)&&$('srt').checked?srt(LR):LR;
+const cat=r=>r.st!=='ok'?(r.k==='404'?'nf':'oth'):r.score>=75?'ok':r.score>=50?'warn':'bad';
+function render(res,total){
+  LR=res;LT=total;
+  const done=res.filter(Boolean),cnt=f=>done.filter(r=>cat(r)===f).length;
+  const T=[['all','মোট',total,''],['ok','ভালো',cnt('ok'),'ok'],['warn','সতর্কতা',cnt('warn'),'warn'],['bad','ঝুঁকিপূর্ণ',cnt('bad'),'bad'],['nf','৪০৪/সাসপেন্ড',cnt('nf'),'bad'],['oth','অন্যান্য',cnt('oth'),'']];
+  $('sum').innerHTML=T.map(t=>`<button type="button" class="tile ${t[3]} ${F===t[0]?'on':''}" data-f="${t[0]}"><b>${t[2]}</b>${t[1]}</button>`).join('');
+  $('out').innerHTML=ordered().map(r=>r?(F==='all'||cat(r)===F?row(r):''):(F==='all'?'<div class="card"><small>⏳ অপেক্ষমাণ...</small></div>':'')).join('')||'<div class="card"><small>এই ক্যাটাগরিতে কিছু নেই।</small></div>';
+  $('srtw').hidden=!done.length;
+  $('dl').innerHTML=total&&done.length===total?'<button id="xl" type="button">📥 Excel (.xlsx) ফাইল ডাউনলোড করুন</button><br><small>ভালো থেকে খারাপ ক্রমে সাজানো, আলাদা শিটে ভালো ও সমস্যাযুক্ত অ্যাকাউন্ট</small>':'';
+  $('prog').innerHTML=done.length<total?`<div class="bar"><i style="width:${done.length/total*100}%"></i></div><small>${done.length}/${total} যাচাই হয়েছে...</small>`:'';
+}
+$('sum').onclick=e=>{const b=e.target.closest('[data-f]');if(b){F=b.dataset.f;render(LR,LT)}};
+const items0=()=>[...new Set($('q').value.split(/[\s,;]+/).filter(Boolean))];
+$('q').oninput=()=>{const n=items0().length;$('cnt').textContent=n?n+'টি অ্যাকাউন্ট':''};
+$('b').onclick=async()=>{
+  token=$('t').value.trim();
+  const items=items0();
+  if(!items.length){$('out').innerHTML='<div class="card bad">কমপক্ষে একটি ইউজারনেম, ইমেইল বা URL দিন।</div>';return}
+  F='all';$('b').disabled=true;const res=new Array(items.length).fill(null);render(res,items.length);
+  let i=0,stop=false;
+  const worker=async()=>{while(i<items.length&&!stop){const k=i++;res[k]=await check(items[k]);if(res[k].st==='rate')stop=true;render(res,items.length)}};
+  await Promise.all([worker(),worker(),worker()]);
+  items.forEach((x,k)=>{if(!res[k])res[k]={inp:x,st:'rate',msg:'রেট লিমিটের কারণে চেক করা হয়নি'}});
+  render(res,items.length);$('b').disabled=false;
+};
+$('d').onclick=()=>{
+  const d=n=>new Date(Date.now()-n*864e5).toISOString(),av='https://avatars.githubusercontent.com/u/583231?v=4';
+  const mk=(login,o,repos,ev)=>({inp:login,...analyze({login,avatar_url:av,html_url:'#',public_gists:0,type:'User',...o},repos,ev)});
+  const res=[
+    mk('good-dev',{name:'Good Dev',bio:'Full-stack developer',created_at:d(1500),public_repos:24,followers:210,following:50},[{fork:false,stargazers_count:40,pushed_at:d(3)}],[{created_at:d(1)}]),
+    mk('brand-new-user',{name:null,bio:null,created_at:d(1),public_repos:0,followers:0,following:2},[],[]),
+    mk('spam-bot-99',{name:'',bio:'',created_at:d(5),public_repos:0,followers:1,following:900},[],[]),
+    mk('fork-only',{name:'Fork Only',bio:'learning',created_at:d(400),public_repos:12,followers:3,following:15},[{fork:true,stargazers_count:0,pushed_at:d(30)}],[{created_at:d(20)}]),
+    {inp:'suspended-account-xyz',st:'nf',k:'404',msg:'"suspended-account-xyz" প্রোফাইল খুললে ৪০৪ আসছে।'}
+  ];
+  F='all';render(res,res.length);
+};
+const RES=new Set('orgs sponsors settings topics features about login pricing marketplace explore notifications issues pulls search site enterprise apps collections trending codespaces security join contact events new organizations readme solutions resources'.split(' '));
+const UN=/^@?[A-Za-z0-9][A-Za-z0-9-]{0,38}$/;
+function extract(t,out){
+  for(const m of t.matchAll(/github\.com\/([A-Za-z0-9][A-Za-z0-9-]{0,38})/gi))if(!RES.has(m[1].toLowerCase()))out.add(m[1]);
+  for(const m of t.matchAll(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g))out.add(m[0]);
+}
+function readSheet(buf,out){
+  if(typeof XLSX==='undefined')throw new Error('lib');
+  const wb=XLSX.read(buf,{type:'array'});
+  wb.SheetNames.forEach(n=>{
+    const ws=wb.Sheets[n];
+    Object.values(ws).forEach(c=>{if(c&&typeof c==='object'){if(c.l&&c.l.Target)extract(c.l.Target,out);if(typeof c.v==='string')extract(c.v,out)}});
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});
+    const hdr=/github|username|user\s*name|ইউজার|handle/i;let col=-1,hr=-1;
+    for(let r=0;r<Math.min(5,rows.length)&&col<0;r++)rows[r].forEach((v,i)=>{if(col<0&&hdr.test(String(v))){col=i;hr=r}});
+    if(col>=0)for(let r=hr+1;r<rows.length;r++){const v=String(rows[r][col]==null?'':rows[r][col]).trim();if(UN.test(v)&&!/^\d+$/.test(v))out.add(v.replace(/^@/,''))}
+  });
+}
+async function readPdf(buf,out){
+  if(typeof pdfjsLib==='undefined')throw new Error('lib');
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;
+  for(let p=1;p<=pdf.numPages;p++){
+    const pg=await pdf.getPage(p);
+    extract((await pg.getTextContent()).items.map(i=>i.str).join(' '),out);
+    (await pg.getAnnotations()).forEach(a=>{if(a.url)extract(a.url,out)});
+  }
+}
+async function handle(files){
+  const out=new Set(),msgs=[];$('fmsg').innerHTML='⏳ ফাইল পড়া হচ্ছে...';
+  for(const f of files){
+    const n=f.name.toLowerCase(),b4=out.size;
+    try{
+      if(n.endsWith('.pdf'))await readPdf(await f.arrayBuffer(),out);
+      else if(/\.(xlsx|xls|csv)$/.test(n))readSheet(await f.arrayBuffer(),out);
+      else (await f.text()).split(/[\s,;]+/).forEach(x=>{if(!x)return;extract(x,out);if(UN.test(x)&&!/^\d+$/.test(x))out.add(x.replace(/^@/,''))});
+      msgs.push(out.size>b4?'✅ '+esc(f.name)+': '+(out.size-b4)+'টি নতুন পাওয়া গেছে':'⚠️ '+esc(f.name)+': কোনো গিটহাব লিংক/ইউজারনেম/ইমেইল পাওয়া যায়নি');
+    }catch(e){msgs.push('❌ '+esc(f.name)+': ফাইল পড়া যায়নি'+(e.message==='lib'?' (ইন্টারনেট সংযোগ দেখুন)':''))}
+  }
+  const cur=new Set(items0());out.forEach(x=>cur.add(x));
+  $('q').value=[...cur].join('\n');$('q').oninput();
+  $('fmsg').innerHTML=msgs.map(m=>'<div>'+m+'</div>').join('')+(out.size?'<div><b>👇 নিচের বক্সে যোগ হয়েছে, এবার "চেক করুন" চাপুন।</b></div>':'');
+}
+$('fi').onchange=e=>{handle([...e.target.files]);e.target.value=''};
+const dr=$('drop');
+['dragenter','dragover'].forEach(v=>dr.addEventListener(v,e=>{e.preventDefault();dr.classList.add('on')}));
+['dragleave','drop'].forEach(v=>dr.addEventListener(v,e=>{e.preventDefault();dr.classList.remove('on')}));
+dr.addEventListener('drop',e=>handle([...e.dataTransfer.files]));
+const dm=()=>{$('d').hidden=location.hash!=='#demo'};dm();addEventListener('hashchange',dm);
+const stTxt=r=>({ok:'ভালো',warn:'সতর্কতা',bad:'ঝুঁকিপূর্ণ',nf:r.k==='404'?'৪০৪/সাসপেন্ড':'ইমেইল মেলেনি',oth:'ত্রুটি/বাকি'})[cat(r)];
+function xl(){
+  if(typeof XLSX==='undefined'){alert('Excel লাইব্রেরি লোড হয়নি, ইন্টারনেট সংযোগ দেখুন');return}
+  const H=['ক্রম','ইনপুট','ইউজারনেম','অবস্থা','স্কোর','সমস্যা/মন্তব্য','রিপো','ফলোয়ার','ফলোইং','যোগদান','সর্বশেষ পুশ (দিন আগে)','প্রোফাইল সম্পূর্ণতা','প্রোফাইল লিংক'];
+  const R=(r,i)=>{const u=r.u;return r.st==='ok'?[i+1,r.inp||u.login,u.login,stTxt(r),r.score,r.L.filter(x=>x[0]==='bad'||x[0]==='warn').map(x=>x[1]).join('; ')||'কোনো সমস্যা নেই',u.public_repos,u.followers,u.following,u.created_at.slice(0,10),r.lastPush==null?'':r.lastPush,(4-r.miss.length)+'/4','https://github.com/'+u.login]:[i+1,r.inp,'',stTxt(r),'',r.msg||'','','','','','','','']};
+  const all=srt(LR),wb=XLSX.utils.book_new();
+  const sheet=(name,list)=>{const ws=XLSX.utils.aoa_to_sheet([H,...list.map(R)]);ws['!cols']=[6,28,20,14,7,55,7,10,10,12,16,14,34].map(w=>({wch:w}));XLSX.utils.book_append_sheet(wb,ws,name)};
+  sheet('সব ফলাফল',all);sheet('ভালো',all.filter(r=>cat(r)==='ok'));sheet('সমস্যাযুক্ত',all.filter(r=>cat(r)!=='ok'));
+  XLSX.writeFile(wb,'github-account-report.xlsx');
+}
+$('dl').onclick=e=>{if(e.target.closest('#xl'))xl()};
+$('srt').onchange=()=>render(LR,LT);
+
+(function(){
+const S=[["repo","প্রাইভেট ও পাবলিক রিপো (push/pull)",0],["workflow","GitHub Actions ওয়ার্কফ্লো",0],["write:packages","প্যাকেজ আপলোড",0],["read:org","অর্গানাইজেশন তথ্য পড়া",0],["gist","Gist তৈরি",0],["notifications","নোটিফিকেশন",0],["user","প্রোফাইল ও ইমেইল",0],["project","প্রজেক্ট বোর্ড",0],["codespace","Codespaces",0],["audit_log","অডিট লগ",0],["write:discussion","টিম ডিসকাশন",0],["manage_billing:copilot","Copilot সিট",0],["write:network_configurations","নেটওয়ার্ক কনফিগ",0],["delete:packages","প্যাকেজ মুছে ফেলা",1],["delete_repo","রিপো মুছে ফেলা",1],["admin:org","অর্গানাইজেশন পুরো নিয়ন্ত্রণ",1],["admin:repo_hook","রিপো webhook",1],["admin:public_key","পাবলিক কী",1],["admin:gpg_key","GPG কী",1],["admin:ssh_signing_key","SSH signing কী",1],["admin:enterprise","এন্টারপ্রাইজ পুরো নিয়ন্ত্রণ",1]];
+const P={"চেকার (scope লাগে না)":[[],"github-checker"],"Git push/pull":[["repo"],"git-push"],"CI/CD":[["repo","workflow"],"ci-cd"],"সব কাজ":[S.map(x=>x[0]).filter(x=>x!=="read:org"),"all-scopes"]};
+let sel={};const note=$("pnote"),exp=$("pexp"),box=$("psc"),pre=$("pre");let cur="চেকার (scope লাগে না)";
+S.forEach(s=>{const l=document.createElement("label");l.className="ps"+(s[2]?" risky":"");l.innerHTML='<input type="checkbox" data-k="'+s[0]+'"><span><code>'+s[0]+'</code><small>'+s[1]+'</small></span>';box.appendChild(l)});
+Object.keys(P).forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=k;b.onclick=()=>{cur=k;sel={};P[k][0].forEach(x=>sel[x]=1);note.value=P[k][1];draw()};pre.appendChild(b)});
+box.addEventListener("change",e=>{const k=e.target.dataset.k;if(!k)return;cur="";if(e.target.checked)sel[k]=1;else delete sel[k];draw()});
+note.addEventListener("input",draw);exp.addEventListener("change",draw);
+function url(){const sc=Object.keys(sel),q=[];if(sc.length)q.push("scopes="+sc.map(encodeURIComponent).join(","));if(note.value.trim())q.push("description="+encodeURIComponent(note.value.trim()));q.push("default_expires_at="+exp.value);return"https://github.com/settings/tokens/new?"+q.join("&")}
+function draw(){
+ box.querySelectorAll("input").forEach(i=>i.checked=!!sel[i.dataset.k]);
+ [...pre.children].forEach(b=>b.classList.toggle("on",b.textContent===cur));
+ const u=url();$("pgo").href=u;$("pu").textContent=u;
+ $("pw-e").classList.toggle("show",exp.value==="none");
+ const risky=S.filter(s=>s[2]&&sel[s[0]]).length;
+ $("pw-s").classList.toggle("show",risky>0||Object.keys(sel).length>5);
+}
+function copy(t,b,orig){const ok=()=>{b.textContent="✓ কপি হয়েছে";setTimeout(()=>b.textContent=orig,1500)};
+ const fb=()=>{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");ok()}catch(e){}a.remove()};
+ try{navigator.clipboard.writeText(t).then(ok,fb)}catch(e){fb()}}
+$("pcp").onclick=function(){copy(url(),this,"লিংক কপি")};
+$("pja").onclick=function(){copy("javascript:document.querySelectorAll('form input[type=checkbox]').forEach(function(c){if(!c.checked)c.click()})",this,"টিক-অল কোড কপি")};
+document.querySelectorAll('a[href="#pat"]').forEach(a=>a.addEventListener("click",()=>{$("pat").open=true}));
+sel={};draw();
+})();
+</script>
+</body>
+</html>
